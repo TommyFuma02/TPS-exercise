@@ -1,0 +1,60 @@
+<!DOCTYPE HTML>
+<HTML><HEAD>
+<TITLE>AjaxExercise</TITLE>
+<LINK rel="stylesheet" type="text/css" href="style.css">
+<SCRIPT>
+// funzione attivata ad ogni pressione di un tasto sulla casella di testo
+function mostra(str){
+  	if (str.length == 0){  // se stringa letta vuota viene inviata risposta blank
+    	document.getElementById("risposta").innerHTML = "";
+    	return;
+	}
+ 	// creazione oggetto XMLHttepRequest per vari tipi di Browser
+	if (window.XMLHttpRequest){  // browser IE7+, Firefox, Chrome, Opera, Safari
+		xmlhttp = new XMLHttpRequest();
+	}
+	else{                        // browser IE6, IE5
+		xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	// dopo una richiesta serve una funzione x ricevere i dati restituiti dal server
+	// onreadystatechange contiene la funzione che processerà la risposta del server 
+	xmlhttp.onreadystatechange = function(){
+	// readyState contiene lo stato della response del server. Ogni volta che 
+	// readyState cambia, la funzione onreadystatechange viene eseguita
+	// 0 La richiesta non è inizializzata
+	// 1 E' stabilita la connessione col server
+	// 2 La richiesta è ricevuta
+	// 3 La richiesta è processata
+	// 4 La richiesta è completa
+	// se status=200 OK   -  404 Not found
+		if (xmlhttp.readyState == 4 && xmlhttp.status == 200){
+		  //i dati trasmessi dal server sono ricavati da responseText (tipo stringa)
+		  document.getElementById("risposta").innerHTML = xmlhttp.responseText;
+		}
+	}	
+	// il metodo open() ha 3 parametri:
+	//  -il primo definisce quale metodo usare (GET/POST)
+	//  -il secondo è l'url dove risiede lo script server-side
+	//  -il terzo (booleano) specifica che la richiesta deve essere asincrona 
+	if(document.getElementById("male").checked)
+		xmlhttp.open("GET", "maschi.php?stringa=" + str, true);
+	else if(document.getElementById("female").checked)
+		xmlhttp.open("GET", "femmine.php?stringa=" + str, true);
+	// send() trasmette effettivamente la richiesta al server. 
+	// senza parametri si indica POST - per GET mettere i parametri tra parentesi
+	xmlhttp.send();
+}
+</SCRIPT></HEAD>
+<BODY>
+<P ID="first">Stai per avere un figlio/a ma non sai come chiamarlo? questo sito è la soluzione perfetta per te!<br>Seleziona il suo sesso, e poi inserisci l'iniziale che preferisci!</P>
+<FORM>
+Sesso: <INPUT TYPE="radio" NAME="button" ID="male" CHECKED="true">M
+	   <INPUT TYPE="radio" NAME="button" ID="female">F
+</FORM>
+<P><B>Scrivere nella casella le iniziali:</B></P>
+<FORM> 
+Nome: <INPUT TYPE="text" ID="nome" onkeyup="mostra(this.value)">
+</FORM>
+<P>Nominativi trovati: <DIV ID="risposta"></DIV></P>
+</BODY>
+</HTML>
