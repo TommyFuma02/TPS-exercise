@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>WorkerExercise</title>
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+    <body>
+    	<p id="first">
+		Questo semplice programma utilizza i webworker, creati alla pressione del pulsante 'Calcola' per calcolare i primi n-multipli<br>
+		e il prodotto dei primi n-numeri del numero inserito. Una volta finito di calcolare, i web worker si terminano automaticamente
+    	</p>
+
+
+	    <input type="text" id="num">
+		
+		<button onclick="myFunction()">Calcola</button>
+
+		<script>
+			var x;
+			var j = 0;
+
+			//istanzi le varaibili che conterranno i webworker
+			var worker1 = null;
+			var worker2 = null;
+			var worker3 = null;
+
+			function myFunction() {
+				if(j == 0) {
+					document.getElementById("prodotto").innerHTML = null;
+					document.getElementById("multipli").innerHTML = null;
+					document.getElementById("time").innerHTML = null;
+
+					worker1 = new Worker('worker1.js');
+					worker2 = new Worker('worker2.js');
+					worker3 = new Worker('worker3.js');
+
+			
+					x = document.getElementById("num").value; //sposto in x il valore inserito
+					
+					
+					worker1.postMessage(0);//invio 0 al worker
+					worker1.onmessage = e  => {
+						document.getElementById("time").innerHTML = `Secondi passati: "${e.data}" sec`;
+						if(e.data != 6) worker1.postMessage(e.data);
+						else ferma_worker();
+					}
+
+					worker2.postMessage(x);//invio x al worker
+					worker2.onmessage = e => {
+						document.getElementById("multipli").innerHTML = `I primi ` + x + ` multipli di ` + x + ` sono: "${e.data}";`;
+					}
+
+					
+					worker3.postMessage(x);//invio x al worker
+					worker3.onmessage = e => {
+						document.getElementById("prodotto").innerHTML = `Il prodotto dei primi ` + x + ` numeri è: "${e.data}"`;
+					}
+
+					j++;
+				}
+			}
+
+			function ferma_worker() {  //termino tutti i worker
+				worker1.terminate();
+				worker2.terminate();
+				worker3.terminate();
+
+				j = 0;
+			}
+
+		</script>
+		<br><br><br>
+
+		<div id="time"></div>
+		<div id="multipli"></div>
+		<div id="prodotto"></div>
+
+    </body>
+</html>

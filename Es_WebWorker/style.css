@@ -1,0 +1,29 @@
+#first {
+	background-color: green;
+	color: black;
+	font-size: 20px;
+}
+
+#time {
+	background-color: red;
+	color: black;
+	height: 50px;
+	font-size: 20px;
+	text-align-top: 15px;
+}
+
+#multipli {
+	margin-top: 15px;
+	background-color: lightblue;
+	color: black;
+	height: 50px;
+	font-size: 20px;
+}
+
+#prodotto {
+	margin-top: 15px;
+	background-color: yellow;
+	color: black;
+	height: 50px;
+	font-size: 20px;
+}
